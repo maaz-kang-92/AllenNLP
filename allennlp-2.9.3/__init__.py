@@ -1,15 +1,21 @@
-from allennlp.data.data_loaders import (
-    DataLoader,
-    TensorDict,
-    allennlp_collate,
-)
-from allennlp.data.dataset_readers.dataset_reader import DatasetReader, DatasetReaderInput
-from allennlp.data.fields.field import DataArray, Field
-from allennlp.data.fields.text_field import TextFieldTensors
-from allennlp.data.instance import Instance
-from allennlp.data.samplers import BatchSampler
-from allennlp.data.token_indexers.token_indexer import TokenIndexer, IndexedTokenList
-from allennlp.data.tokenizers import Token, Tokenizer
-from allennlp.data.vocabulary import Vocabulary
-from allennlp.data.batch import Batch
-from allennlp.data.image_loader import ImageLoader, TorchImageLoader
+# We get a lot of these spurious warnings,
+# see https://github.com/ContinuumIO/anaconda-issues/issues/6678
+import warnings  # noqa
+
+warnings.filterwarnings("ignore", message="numpy.dtype size changed")
+warnings.filterwarnings("ignore", message="numpy.ufunc size changed")
+
+try:
+    # On some systems this prevents the dreaded
+    # ImportError: dlopen: cannot load any more object with static TLS
+    import transformers, spacy, torch, numpy  # noqa
+
+except ModuleNotFoundError:
+    print(
+        "Using AllenNLP requires the python packages Spacy, "
+        "Pytorch and Numpy to be installed. Please see "
+        "https://github.com/allenai/allennlp for installation instructions."
+    )
+    raise
+
+from allennlp.version import VERSION as __version__  # noqa
